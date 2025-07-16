@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom 3D and animation styles */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* 3D Card Effect */
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+        }
+        .card-3d:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Floating Animation with 3D rotation */
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0) rotate(-2deg); 
+            }
+            25% { 
+                transform: translateY(-20px) rotate(2deg); 
+            }
+            50% { 
+                transform: translateY(0) rotate(-2deg); 
+            }
+            75% { 
+                transform: translateY(-15px) rotate(2deg); 
+            }
+        }
+        .floating {
+            animation: float 8s ease-in-out infinite;
+            transform-style: preserve-3d;
+            transform: perspective(500px) rotateX(5deg) rotateY(1deg);
+        }
+
+        /* Glow Effect with pulse */
+        .glow {
+            transition: all 0.5s ease;
+            position: relative;
+        }
+        .glow:hover {
+            text-shadow: 0 0 15px rgba(74, 168, 255, 0.9);
+        }
+        .glow::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(56,189,248,0.4) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .glow:hover::after {
+            opacity: 1;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.6; }
+            70% { transform: scale(1.1); opacity: 0.2; }
+            100% { transform: scale(0.95); opacity: 0.6; }
+        }
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+            50% { transform: scale(1.05) rotate(5deg); opacity: 1; }
+        }
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes spin-slow-reverse {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+        
+        @keyframes pulse-fast {
+            0%, 100% { 
+                transform: scale(1) rotate(0deg); 
+                opacity: 0.8; 
+            }
+            25% {
+                transform: scale(1.05) rotate(-3deg);
+                background: conic-gradient(from 180deg, #6366f1, #ec4899, #6366f1);
+            }
+            50% { 
+                transform: scale(1.1) rotate(-5deg); 
+                opacity: 1;
+                background: conic-gradient(from 180deg, #ec4899, #6366f1, #ec4899);
+            }
+            75% {
+                transform: scale(1.05) rotate(-3deg);
+                background: conic-gradient(from 180deg, #6366f1, #ec4899, #6366f1);
+            }
+        }
+
+        /* Animated Particle Background */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .particles::before {
+            content: "";
+            position: absolute;
+            width: 300%;
+            height: 300%;
+            top: -100%;
+            left: -100%;
+            background-image: 
+                radial-gradient(circle, rgba(100,116,139,0.2) 1px, transparent 1px),
+                radial-gradient(circle, rgba(100,116,139,0.15) 1px, transparent 1px),
+                radial-gradient(circle, rgba(100,116,139,0.1) 1px, transparent 1px);
+            background-size: 70px 70px, 110px 110px, 30px 30px;
+            animation: particleMove 60s linear infinite;
+            opacity: 0.3;
+        }
+        @keyframes particleMove {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(70px, 70px); }
+            50% { transform: translate(0, 140px); }
+            75% { transform: translate(-70px, 70px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        /* Wave Text Animation */
+        .wave-text {
+            display: inline-block;
+            animation: wave 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes wave {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-5px) rotate(5deg); }
+            75% { transform: translateY(5px) rotate(-5deg); }
+        }
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent; text-shadow: 0 0 8px rgba(56, 189, 248, 0); }
+            50% { 
+                border-color: #38bdf8; 
+                box-shadow: 0 0 15px rgba(56, 189, 248, 0.7);
+                text-shadow: 0 0 15px rgba(56, 189, 248, 0.7);
+            }
+        }
+        @keyframes text-glow {
+            0% { text-shadow: 0 0 5px rgba(56, 189, 248, 0.3); }
+            100% { text-shadow: 0 0 15px rgba(56, 189, 248, 0.7); }
+        }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(45deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Particle Background -->
+    <div class="particles"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 backdrop-blur-sm bg-slate-900/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <span class="text-xl font-bold gradient-text">Portfolio</span>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#home" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-slate-800 transition-all duration-300">Home</a>
+                        <a href="#about" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-slate-800 transition-all duration-300">About</a>
+                        <a href="#skills" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-slate-800 transition-all duration-300">Skills</a>
+                        <a href="#projects" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-slate-800 transition-all duration-300">Projects</a>
+                        <a href="#contact" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-slate-800 transition-all duration-300">Contact</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="menuBtn" class="text-gray-300 hover:text-white focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden pt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6 text-center md:text-left">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-4">
+                        <span class="wave-text">Hi, I'm </span>
+                        <span class="gradient-text glow">PRATIK PANKHANIYA</span>
+                    </h1>
+                    <h2 class="text-2xl md:text-3xl mb-6">
+                        <span class="animate-pulse">Mobile applications Developer</span>
+                    </h2>
+                    <p class="text-lg text-gray-300 max-w-lg">
+                        I build exceptional digital experiences with modern Mobile technologies and clean code practices.
+                    </p>
+                    <div class="flex space-x-4 justify-center md:justify-start">
+                        <a href="#contact" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg font-medium text-white hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                            Hire Me
+                        </a>
+                        <a href="#projects" class="px-6 py-3 border border-blue-400 text-blue-400 rounded-lg font-medium hover:bg-blue-900/30 transition-all duration-300 transform hover:scale-105">
+                            View Work
+                        </a>
+                    </div>
+                </div>
+                <div class="flex justify-center relative">
+                    <div class="relative floating">
+                        <div class="relative overflow-hidden rounded-3xl w-64 h-64 md:w-80 md:h-80">
+                            <img src="C:\Users\Pratik\OneDrive\Desktop\portfolio\WhatsApp Image 2025-07-16 at 23.19.00_c728ae0d.jpg" alt="3D rendered developer avatar with holographic UI elements floating around" class="w-full h-full object-cover transition-all duration-700 transform hover:scale-110" />
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-70 hover:opacity-50 transition-opacity duration-500"></div>
+                        </div>
+                        <div class="absolute -top-6 -right-4 w-28 h-28 rounded-full border-4 border-blue-400/30 animate-spin-slow"></div>
+                        <div class="absolute -bottom-6 -left-4 w-20 h-20 rounded-full border-4 border-indigo-400/30 animate-spin-slow-reverse"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-slate-800/50 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 gradient-text">
+                <span class="glow">About Me</span>
+            </h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="col-span-2">
+                    <div class="bg-slate-900/50 rounded-xl p-8 card-3d">
+                        <h3 class="text-2xl font-semibold mb-4">Who I Am</h3>
+                        <p class="text-gray-300 mb-4">
+                           I am a dedicated and motivated individual with a strong interest in computer science, eager to begin my career in a positive and challenging environment. I am seeking an opportunity where I can apply my knowledge, learn new technologies, contribute to a team, and grow both personally and professionally.
+                        </p>
+                        <p class="text-gray-300 mb-4">
+                            Specializing in React, Node.js, and cloud architecture, I help startups and enterprises translate their vision into scalable solutions. I'm passionate about clean code, intuitive UX, and mentoring the next generation of developers.
+                        </p>
+                        <div class="flex space-x-4 mt-6">
+                            <a href="https://github.com" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-500 transition-all duration-300">
+                                <i class="fab fa-github text-xl"></i>
+                            </a>
+                            <a href="https://linkedin.com" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-700 transition-all duration-300">
+                                <i class="fab fa-linkedin-in text-xl"></i>
+                            </a>
+                            <a href="https://twitter.com" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-400 transition-all duration-300">
+                                <i class="fab fa-twitter text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="bg-slate-900/50 rounded-xl p-8 h-full card-3d">
+                        <h3 class="text-2xl font-semibold mb-6">Experience</h3>
+                        <div class="space-y-6">
+                            <div class="border-l-2 border-blue-500 pl-4 py-2">
+                                <h4 class="font-medium">Senior Software Engineer</h4>
+                                <p class="text-sm text-gray-400">TechCorp • 2021-Present</p>
+                                <p class="text-gray-300 text-sm mt-1">Leading frontend architecture and mentoring junior developers.</p>
+                            </div>
+                            <div class="border-l-2 border-indigo-500 pl-4 py-2">
+                                <h4 class="font-medium">Full Stack Developer</h4>
+                                <p class="text-sm text-gray-400">StartUpX • 2018-2021</p>
+                                <p class="text-gray-300 text-sm mt-1">Built and maintained core product features across the stack.</p>
+                            </div>
+                            <div class="border-l-2 border-purple-500 pl-4 py-2">
+                                <h4 class="font-medium">Junior Developer</h4>
+                                <p class="text-sm text-gray-400">DevAgency • 2016-2018</p>
+                                <p class="text-gray-300 text-sm mt-1">Created responsive websites and small applications for clients.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 bg-slate-900/30 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 gradient-text">
+                <span class="glow">My Skills</span>
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Frontend Skills -->
+                <div class="bg-slate-900/50 rounded-xl p-6 card-3d hover:border-b-2 hover:border-blue-500">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mb-4">
+                            <i class="fab fa-react text-3xl text-blue-400"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">Mobile App Development</h3>
+                        <p class="text-sm text-gray-300">
+                           Flutter (Dart), Android (Java), Firebase
+                        </p>
+                    </div>
+                </div>
+                <!-- Backend Skills -->
+                <div class="bg-slate-900/50 rounded-xl p-6 card-3d hover:border-b-2 hover:border-green-500">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-server text-3xl text-green-400"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">Backend</h3>
+                        <p class="text-sm text-gray-300">
+                            Node.js, Express, Django, PostgreSQL, MongoDB, GraphQL
+                        </p>
+                    </div>
+                </div>
+                <!-- Cloud/DevOps -->
+                <div class="bg-slate-900/50 rounded-xl p-6 card-3d hover:border-b-2 hover:border-purple-500">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-cloud text-3xl text-purple-400"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">Cloud & DevOps</h3>
+                        <p class="text-sm text-gray-300">
+                            AWS, Docker, Kubernetes, CI/CD, Serverless, Terraform
+                        </p>
+                    </div>
+                </div>
+                <!-- Others -->
+                <div class="bg-slate-900/50 rounded-xl p-6 card-3d hover:border-b-2 hover:border-yellow-500">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-yellow-500/10 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-cogs text-3xl text-yellow-400"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">Others</h3>
+                        <p class="text-sm text-gray-300">
+                            Testing, Agile, UX/UI, Mobile, Security, Git
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 flex justify-center">
+                <div class="bg-slate-900/50 rounded-xl p-6 max-w-4xl w-full card-3d">
+                    <h3 class="text-xl font-semibold mb-4 text-center">Technology Radar</h3>
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <span class="px-3 py-1 bg-blue-900/30 text-blue-300 rounded-full text-sm">React</span>
+                        <span class="px-3 py-1 bg-green-900/30 text-green-300 rounded-full text-sm">Node.js</span>
+                        <span class="px-3 py-1 bg-purple-900/30 text-purple-300 rounded-full text-sm">TypeScript</span>
+                        <span class="px-3 py-1 bg-red-900/30 text-red-300 rounded-full text-sm">GraphQL</span>
+                        <span class="px-3 py-1 bg-yellow-900/30 text-yellow-300 rounded-full text-sm">AWS</span>
+                        <span class="px-3 py-1 bg-indigo-900/30 text-indigo-300 rounded-full text-sm">Docker</span>
+                        <span class="px-3 py-1 bg-pink-900/30 text-pink-300 rounded-full text-sm">Svelte</span>
+                        <span class="px-3 py-1 bg-teal-900/30 text-teal-300 rounded-full text-sm">MongoDB</span>
+                        <span class="px-3 py-1 bg-orange-900/30 text-orange-300 rounded-full text-sm">Next.js</span>
+                        <span class="px-3 py-1 bg-emerald-900/30 text-emerald-300 rounded-full text-sm">PostgreSQL</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 bg-slate-800/30 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 gradient-text">
+                <span class="glow">Featured Projects</span>
+            </h2>
+            <p class="text-center text-gray-300 max-w-2xl mx-auto mb-12">
+                Here are some of my recent projects. Each one was built to solve specific problems and deliver exceptional user experiences.
+            </p>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="bg-slate-900/50 rounded-xl overflow-hidden card-3d hover:shadow-xl">
+                    <div class="overflow-hidden h-48">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/e0732327-6abc-4e45-b23d-1b1e76d4abf4.png" alt="Dashboard application with analytics charts and performance metrics in dark mode" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Analytics Dashboard</h3>
+                        <p class="text-gray-300 mb-4">
+                            A real-time business analytics dashboard with customizable widgets and data visualization.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-blue-900/30 text-blue-300 rounded-full text-xs">React</span>
+                            <span class="px-2 py-1 bg-green-900/30 text-green-300 rounded-full text-xs">D3.js</span>
+                            <span class="px-2 py-1 bg-purple-900/30 text-purple-300 rounded-full text-xs">Node.js</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <a href="#" class="text-blue-400 hover:text-blue-300 text-sm flex items-center">
+                                <i class="fas fa-external-link-alt mr-1"></i> Live Demo
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-gray-300 text-sm flex items-center">
+                                <i class="fab fa-github mr-1"></i> View Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 2 -->
+                <div class="bg-slate-900/50 rounded-xl overflow-hidden card-3d hover:shadow-xl">
+                    <div class="overflow-hidden h-48">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cd3d42ea-c451-42bd-80cf-1b68325fb0d6.png" alt="E-commerce platform showing product listings with clean modern UI" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">E-Commerce Platform</h3>
+                        <p class="text-gray-300 mb-4">
+                            Full-featured e-commerce solution with product management, cart, and payment processing.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-yellow-900/30 text-yellow-300 rounded-full text-xs">Vue</span>
+                            <span class="px-2 py-1 bg-red-900/30 text-red-300 rounded-full text-xs">Firebase</span>
+                            <span class="px-2 py-1 bg-indigo-900/30 text-indigo-300 rounded-full text-xs">Stripe</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <a href="#" class="text-blue-400 hover:text-blue-300 text-sm flex items-center">
+                                <i class="fas fa-external-link-alt mr-1"></i> Live Demo
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-gray-300 text-sm flex items-center">
+                                <i class="fab fa-github mr-1"></i> View Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 3 -->
+                <div class="bg-slate-900/50 rounded-xl overflow-hidden card-3d hover:shadow-xl">
+                    <div class="overflow-hidden h-48">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f4fa4aaa-e362-46d0-9710-b49e00f5c6d1.png" alt="Social media app interface showing user profiles and activity feed" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Social Network App</h3>
+                        <p class="text-gray-300 mb-4">
+                            A community platform with real-time updates, user profiles, and content sharing.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-blue-900/30 text-blue-300 rounded-full text-xs">Next.js</span>
+                            <span class="px-2 py-1 bg-green-900/30 text-green-300 rounded-full text-xs">MongoDB</span>
+                            <span class="px-2 py-1 bg-purple-900/30 text-purple-300 rounded-full text-xs">GraphQL</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <a href="#" class="text-blue-400 hover:text-blue-300 text-sm flex items-center">
+                                <i class="fas fa-external-link-alt mr-1"></i> Live Demo
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-gray-300 text-sm flex items-center">
+                                <i class="fab fa-github mr-1"></i> View Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="https://github.com" target="_blank" class="inline-flex items-center px-6 py-3 border border-gray-600 rounded-lg text-white hover:bg-gray-900/50 transition-all duration-300 group">
+                    <i class="fab fa-github mr-2"></i>
+                    <span>View All Projects on GitHub</span>
+                    <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform duration-300"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 gradient-text">
+                <span class="glow">Get In Touch</span>
+            </h2>
+            <p class="text-center text-gray-300 max-w-2xl mx-auto mb-12">
+                Have a project in mind or want to discuss potential opportunities? Feel free to reach out!
+            </p>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="bg-slate-900/50 rounded-xl p-8 card-3d">
+                    <h3 class="text-2xl font-semibold mb-6">Contact Form</h3>
+                    <form class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-300 mb-1">Name</label>
+                            <input type="text" id="name" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300" placeholder="Your Name">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                            <input type="email" id="email" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300" placeholder="your@email.com">
+                        </div>
+                        <div>
+                            <label for="subject" class="block text-sm font-medium text-gray-300 mb-1">Subject</label>
+                            <input type="text" id="subject" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300" placeholder="What's this about?">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-300 mb-1">Message</label>
+                            <textarea id="message" rows="5" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300" placeholder="Your message here..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-3 px-6 rounded-lg font-medium hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02]">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="space-y-6">
+                    <div class="bg-slate-900/50 rounded-xl p-8 h-full card-3d">
+                        <h3 class="text-2xl font-semibold mb-6">Contact Info</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 bg-blue-500/10 rounded-full p-3">
+                                    <i class="fas fa-map-marker-alt text-blue-400"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-medium">Location</h4>
+                                    <p class="text-gray-300 text-sm">San Francisco, CA</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 bg-green-500/10 rounded-full p-3">
+                                    <i class="fas fa-envelope text-green-400"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-medium">Email</h4>
+                                    <p class="text-gray-300 text-sm">contact@example.com</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 bg-purple-500/10 rounded-full p-3">
+                                    <i class="fas fa-phone-alt text-purple-400"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-medium">Phone</h4>
+                                    <p class="text-gray-300 text-sm">+1 (555) 123-4567</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h4 class="font-medium mb-4">Follow Me</h4>
+                            <div class="flex space-x-4">
+                                <a href="https://github.com" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-500 transition-all duration-300">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                                <a href="https://linkedin.com" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-700 transition-all duration-300">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="https://twitter.com" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-400 transition-all duration-300">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="https://instagram.com" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-pink-500 transition-all duration-300">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900/80 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-xl font-bold mb-4 gradient-text">Alex Carter</h2>
+                <p class="text-gray-400 text-sm mb-6">
+                    Building digital experiences that make an impact.
+                </p>
+                <div class="flex justify-center space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-blue-500">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-red-400">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+                <div class="mt-6 border-t border-gray-800 pt-6">
+                    <p class="text-xs text-gray-500">
+                        © 2023 DevPort. All rights reserved. Made with <i class="fas fa-heart text-red-400"></i> by Alex Carter
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Enhanced Mobile menu toggle with animation
+        document.getElementById('menuBtn').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+            this.classList.toggle('active');
+            
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.style.animation = 'fadeOut 0.3s ease-out forwards';
+                setTimeout(() => mobileMenu.style.animation = '', 300);
+            } else {
+                mobileMenu.style.animation = 'fadeIn 0.3s ease-out forwards';
+                mobileMenu.style.display = 'block';
+            }
+        });
+
+        // Enhanced Smooth scrolling with parallax effect
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                const offset = 80;
+                const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+                
+                // Add bounce animation to section header
+                const heading = target.querySelector('h2');
+                if (heading) {
+                    heading.style.animation = 'bounce 1s ease';
+                    setTimeout(() => heading.style.animation = '', 1000);
+                }
+            });
+        });
+
+        // Animation on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fadeIn');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        document.querySelectorAll('.card-3d, .typewriter, .floating').forEach(el => {
+            observer.observe(el);
+        });
+
+        // 3D tilting effect for cards
+        document.querySelectorAll('.card-3d').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const x = e.offsetX;
+                const y = e.offsetY;
+                const { width, height } = card.getBoundingClientRect();
+                const xPos = (x / width - 0.5) * 20;
+                const yPos = (y / height - 0.5) * 20;
+                card.style.transform = `translateY(-10px) rotateX(${-yPos}deg) rotateY(${xPos}deg)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(-10px) rotateX(5deg)';
+                setTimeout(() => {
+                    card.style.transform = '';
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>
